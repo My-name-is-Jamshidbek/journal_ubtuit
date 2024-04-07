@@ -1,0 +1,42 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Maqola joylash
+{% endblock title %}
+
+{% block content %}
+    <div class="text-center m-5">
+        <h1>Maqola joylash</h1>
+        <p>Maqola malumotlarini to`ldiring</p>
+    </div>
+    <div class="row m-5">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Sarlavha</label>
+              <input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Sarlavha ma`lumotlarini kiriting" required>
+              <!-- Display errors for 'title' field -->
+              {% for error in form.title.errors %}
+              <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Tavsif</label>
+              <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" required></textarea>
+              <!-- Display errors for 'description' field -->
+              {% for error in form.description.errors %}
+              <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <div class="mb-3">
+              <label for="formFileMultiple" class="form-label">Maqola faylini yuklang</label>
+              <input class="form-control" type="file" name="file_url" id="formFileMultiple" required>
+              <!-- Display errors for 'file_url' field -->
+              {% for error in form.file_url.errors %}
+              <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary m-2">Yuklash</button>
+        </form>
+    </div>
+{% endblock content %}
+    

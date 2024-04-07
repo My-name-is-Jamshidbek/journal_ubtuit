@@ -1,0 +1,36 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Maqolalar
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center mt-5 mb-4">Maqolalar jadvali</h1>
+            <ul class="list-group">
+                {% for article in articles %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">{{ article.title }}</h5>
+                            <p>{{ article.description|truncatechars:150 }}</p>
+                            <small class="text-muted">Yozuvchi: {{ article.user.lastname }}</small>
+                        </div>
+                        <div>
+                        <div class="row">
+                            <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary m-2 col">Ko'rish</a>
+                            {% if article.user == request.user %}
+                                <a href="{% url 'article_update' article_id=article.id %}" class="btn btn-sm btn-success m-2 col">O`zgartirish</a>
+                                <a href="{% url 'article_delete' article_id=article.id %}" class="btn btn-sm btn-danger m-2 col">O`chirish</a>
+                            {% endif %}
+                        </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

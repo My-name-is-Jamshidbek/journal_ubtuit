@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-
+from accounts.forms import UserRegistrationForm
 
 def login_view(request):
     if request.method == 'POST':
@@ -17,13 +17,15 @@ def login_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegistrationForm(request.POST)
+        print(1)
         if form.is_valid():
+            print(1)
             user = form.save()
             login(request, user)
             return redirect('home')  # Replace 'home' with the name of your homepage URL pattern
     else:
-        form = UserCreationForm()
+        form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
 
