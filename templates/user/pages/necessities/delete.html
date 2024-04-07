@@ -1,0 +1,23 @@
+{% extends 'user/master.html' %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Talabnomani o`chirish</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Ushbu "{{ necessity.title }}" talabnomani o`chirishga aminmisiz?</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Ha o'chirilsin</button>
+                            <a href="{% url 'list_necessities' %}" class="btn btn-secondary">Bekor qilish</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

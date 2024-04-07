@@ -18,6 +18,9 @@
         <li class="nav-item">
           <a class="nav-link{% if not user.is_authenticated %} disabled {% endif %} " {% if user.is_authenticated %} href="{% url 'my_articles' %}" {% else %}aria-disabled="true" {% endif %}>Mening maqolalarim</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'list_necessities' %}">Talablar</a>
+        </li>
       </ul>
         {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" class="btn btn-outline-danger my-2 btn-sm my-sm-0 m-2">Chiqish</a>

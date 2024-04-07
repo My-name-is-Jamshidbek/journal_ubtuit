@@ -35,8 +35,35 @@
               <div class="text-danger">{{ error }}</div>
               {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary m-2">Yuklash</button>
+            <div class="form-check m-2">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                  <a href="{% url 'list_necessities' %}">Talablar</a> bilan tanishdim
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary m-2 disabled" id="submitButton">Yuklash</button>
+            <a type="button" href="{% url 'list_necessities' %}" class="btn btn-success">Talablar</a>
         </form>
     </div>
 {% endblock content %}
-    
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('flexCheckDefault');
+        const submitButton = document.getElementById('submitButton');
+
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                submitButton.classList.remove('disabled');
+            } else {
+                submitButton.classList.add('disabled');
+            }
+        });
+
+        // Check initial state
+        if (!checkbox.checked) {
+            submitButton.classList.add('disabled');
+        }
+    });</script>
+{% endblock %}
