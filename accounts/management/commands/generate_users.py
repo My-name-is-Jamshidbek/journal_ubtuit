@@ -14,5 +14,5 @@ class Command(BaseCommand):
             email = fake.email()
             username = fake.user_name()
             password = fake.password()
-            User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+            User.objects.create_user(username=username, firstname=first_name, lastname=last_name, email=email, password=password)
         self.stdout.write(self.style.SUCCESS('Fake users created successfully'))
