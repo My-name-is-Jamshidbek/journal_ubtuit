@@ -45,8 +45,8 @@
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'login' %}">Kirish</a>
           </div>
         {% endif %}
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" name="q" placeholder="Qidirish uchun so`z" aria-label="Search">
+      <form class="d-flex" role="search" action="{% url 'search_article' %}">
+        <input class="form-control me-2" type="search" name="q" {% if query %}value="{{ query }}"{% endif %} placeholder="Qidirish uchun so`z" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Qidirish</button>
       </form>
     </div>

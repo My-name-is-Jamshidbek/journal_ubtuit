@@ -3,19 +3,27 @@ from articles.models import Article
 from datetime import datetime
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from articles.additional_functions import get_current_quarter, get_last_quarter_dates
 
 
 def home(request):
     query = request.GET.get('q')
     search_year = request.GET.get('search_year')
     search_issue = request.GET.get('search_issue')
+    last_quarter_start, last_quarter_end = get_last_quarter_dates()
     if query:
         articles = Article.objects.filter(
+            status=1
+        ).filter(
             Q(title__icontains=query) |
             Q(description__icontains=query)
-        )
+        ).filter(
+            created_at__lt=last_quarter_start  # Exclude articles from last quarter
+        ).order_by('-created_at')
     else:
-        articles = Article.objects.all()
+        articles = Article.objects.filter(status=1).all().filter(
+            created_at__lt=last_quarter_start  # Exclude articles from last quarter
+        ).order_by('-created_at')
 
     if search_year:
         articles = articles.filter(created_at__year=search_year)
@@ -38,8 +46,12 @@ def home(request):
     except EmptyPage:
         # If page is out of range, deliver last page of results.
         articles = paginator.page(paginator.num_pages)
-    articles_years = Article.objects.all().values_list('created_at__year')
-    articles_months = Article.objects.all().values_list('created_at__year', 'created_at__month')
+    articles_years = Article.objects.filter(status=1).all().filter(
+            created_at__lt=last_quarter_start  # Exclude articles from last quarter
+        ).values_list('created_at__year')
+    articles_months = Article.objects.filter(status=1).all().filter(
+            created_at__lt=last_quarter_start  # Exclude articles from last quarter
+        ).values_list('created_at__year', 'created_at__month')
     issues_years = {i[0]: set() for i in articles_years}
     for year, month in articles_months:
         if month < 4:
@@ -61,4 +73,5 @@ def home(request):
         now_issue = 3
     else:
         now_issue = 4
-    return render(request, 'user/pages/home.html', {'articles': articles, 'issues': issues_years, 'now_year': now_year, "now_issue": now_issue})
+    issues_head = dict(list(issues_years.items())[:2])
+    return render(request, 'user/pages/home.html', {'articles': articles, 'issues': issues_years, 'now_year': now_year, "now_issue": now_issue, "query": query, "issues_head": issues_head})

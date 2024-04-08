@@ -17,10 +17,10 @@
                                 <p>{{ article.description|truncatechars:150 }}</p>
                                 <p class="text-muted">Yozuvchi: {{ article.user.lastname }}</p>
                                 <small class="text-muted">Yuklangan sana: {{ article.created_at }}</small>
-                            </div>
-                            <div>
-                                <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
-                            </div>
+                          </div>
+                        <div>
+                            <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
+                        </div>
                         </div>
                     </li>
                 {% endfor %}

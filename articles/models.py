@@ -7,6 +7,7 @@ class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    reason = models.TextField(default="Kiritilmagan")
     file_url = models.FileField(upload_to='article_files/')
     status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

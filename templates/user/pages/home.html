@@ -1,10 +1,42 @@
 {% extends 'user/master.html' %}
 {% block title %}
-    Maqolalar
+    Asosiy sahifa
 {% endblock title %}
 
 {% block content %}
 <div class="container">
+        <h1 class="text-center mt-5 mb-4">Jurnallar jadvali</h1>
+    <div class="d-flex">
+        {% for year, months in issues_head.items %}
+            <div class="card text-center m-2">
+                <div class="card-header">
+                    Taqdim etilgan
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ year }}-yil</h5>
+                    <p class="card-text">Mart-Iyun-Sentyabr-Dekabr</p>
+                    <div class="d-flex align-items-center" style="column-gap: 5px; row-gap: 5px; flex-wrap: wrap">
+                        {% for month in months %}
+                            <a href="{% url 'list_article' %}?search_year={{ year }}&search_issue={{ month }}" class="btn btn-primary text-nowrap">{{ month }}-chorak</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="card text-center">
+            <div class="card-header">
+                Taqdim etish uchun ochiq
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ now_year}} - yil</h5>
+                <p class="card-text">{{ now_issue }} - chorak uchun maqolalar qabul qilish davom etmoqda.</p>
+                <a href="{% url 'create_article' %}" class="btn btn-primary">Taqdim etish</a>
+            </div>
+            <div class="card-footer text-body-secondary">
+                Davom etmoqda
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8">
             <h1 class="text-center mt-5 mb-4">Maqolalar jadvali</h1>
@@ -17,10 +49,10 @@
                                 <p>{{ article.description|truncatechars:150 }}</p>
                                 <p class="text-muted">Yozuvchi: {{ article.user.lastname }}</p>
                                 <small class="text-muted">Yuklangan sana: {{ article.created_at }}</small>
-                            </div>
-                            <div>
-                                <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
-                            </div>
+                          </div>
+                        <div>
+                            <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
+                        </div>
                         </div>
                     </li>
                 {% endfor %}
