@@ -116,6 +116,7 @@ def article_list(request):
     return render(request, 'user/pages/article_list.html', {'articles': articles, 'issues': issues_years, 'now_year': now_year, "now_issue": now_issue})
 
 
+@login_required
 # User List
 def user_article_list(request):
     articles = Article.objects.filter(user=request.user)

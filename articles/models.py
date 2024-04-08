@@ -8,6 +8,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     file_url = models.FileField(upload_to='article_files/')
+    status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
