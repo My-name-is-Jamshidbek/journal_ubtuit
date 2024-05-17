@@ -30,7 +30,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ now_year}} - yil</h5>
                 <p class="card-text">{{ now_issue }} - chorak uchun maqolalar qabul qilish davom etmoqda.</p>
-                <a href="{% url 'create_article' %}" class="btn btn-primary">Taqdim etish</a>
+                <a href="{% url 'create_article' %}" class="btn btn-primary" style="background-color: #0f237e !important;">Taqdim etish</a>
             </div>
             <div class="card-footer text-body-secondary">
                 Davom etmoqda
@@ -83,21 +83,21 @@
         </div>
         <div class="col-md-4">
             <h1 class="text-center mt-5 mb-4">Jurnallar jadvali</h1>
-            <div class="card text-center">
+            <div class="card text-center"   style="margin-bottom: 30px">
               <div class="card-header">
                 Taqdim etish uchun ochiq
               </div>
               <div class="card-body">
                 <h5 class="card-title">{{ now_year}} - yil</h5>
                 <p class="card-text">{{ now_issue }} - chorak uchun maqolalar qabul qilish davom etmoqda.</p>
-                <a href="{% url 'create_article' %}" class="btn btn-primary">Taqdim etish</a>
+                <a href="{% url 'create_article' %}" class="btn btn-primary" style="background: #0f237e !important;">Taqdim etish</a>
               </div>
               <div class="card-footer text-body-secondary">
                 Davom etmoqda
               </div>
             </div>
             {% for year, months in issues.items %}
-            <div class="card text-center mt-2 mb-2">
+            <div class="card text-center" style="margin-bottom: 30px">
               <div class="card-header">
                 Taqdim etilgan
               </div>
