@@ -13,7 +13,7 @@
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Asosiy sahifa</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'list_article' %}">Maqolalar</a>
+          <a class="nav-link" href="{% url 'list_journal' %}">Maqolalar</a>
         </li>
         {% if not user.is_staff and not user.is_admin %}
             <li class="nav-item">
@@ -28,8 +28,12 @@
         </li>
       </ul>
         {% if user.is_authenticated and user.is_staff%}
+          <a type="button" class="btn btn-primary m-2" href="{% url 'journals' %}">
+              Jurnallar
+          </a>
+
         <div class="btn-group m-2">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle m-2" data-bs-toggle="dropdown" aria-expanded="false">
               Maqolalarni boshqarish
           </button>
           <ul class="dropdown-menu">

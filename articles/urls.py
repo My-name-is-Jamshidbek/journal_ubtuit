@@ -2,7 +2,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.article_list, name='list_article'),
+    path('', views.journal_list, name='list_journal'),
+    path('<int:journal_id>/', views.journal_detail, name='journal_detail'),
     path('search/', views.search_articles, name='search_article'),
     path('my/', views.user_article_list, name='my_articles'),
     path('create-article/', views.create_article, name='create_article'),
