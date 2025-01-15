@@ -70,7 +70,7 @@ def loaded_articles(request):
         # If page is out of range, deliver last page of results.
         articles = paginator.page(paginator.num_pages)
 
-    return render(request, 'user/pages/articles/loaded.html',
+    return render(request, 'user/pages/articles/articles_admin.html',
                       {'articles': articles})
 
 
@@ -90,7 +90,7 @@ def buying_articles(request):
         # If page is out of range, deliver last page of results.
         articles = paginator.page(paginator.num_pages)
 
-    return render(request, 'user/pages/articles/loaded.html',
+    return render(request, 'user/pages/articles/articles_admin.html',
                       {'articles': articles})
 
 
@@ -110,7 +110,7 @@ def rejected_articles(request):
         # If page is out of range, deliver last page of results.
         articles = paginator.page(paginator.num_pages)
 
-    return render(request, 'user/pages/articles/loaded.html',
+    return render(request, 'user/pages/articles/articles_admin.html',
                       {'articles': articles})
 
 
@@ -130,5 +130,5 @@ def accepted_articles(request):
         # If page is out of range, deliver last page of results.
         articles = paginator.page(paginator.num_pages)
 
-    return render(request, 'user/pages/articles/loaded.html',
+    return render(request, 'user/pages/articles/articles_admin.html',
                       {'articles': articles})

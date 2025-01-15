@@ -56,7 +56,7 @@ def delete_article(request, article_id):
 def article_detail(request, article_id):
     query = request.GET.get('q')
     article = get_object_or_404(Article, pk=article_id)
-    if request.user != article.user:
+    if request.user != article.user and not (request.user.is_superuser or request.user.is_staff):
         article = get_object_or_404(Article, pk=article_id, status=1)
     return render(request, 'user/pages/article_detail.html', {'article': article})
 
