@@ -24,7 +24,7 @@ def create_article(request):
             return redirect('home')  # Replace 'home' with your desired URL
     else:
         form = ArticleForm()
-    return render(request, 'user/pages/../templates/admin/journals/create_article.html', {'form': form})
+    return render(request, 'admin/journals/create_article.html', {'form': form})
 
 
 @login_required
@@ -39,7 +39,7 @@ def update_article(request, article_id):
             return redirect('my_articles')
     else:
         form = ArticleForm(instance=article)
-    return render(request, 'user/pages/update_article.html', {'form': form, 'article': article})
+    return render(request, 'user/pages/my_update_article.html', {'form': form, 'article': article})
 
 
 @login_required
@@ -50,15 +50,17 @@ def delete_article(request, article_id):
     if request.method == 'POST':
         article.delete()
         return redirect('list_article')
-    return render(request, 'user/pages/delete_article.html', {'article': article})
+    return render(request, 'user/pages/my_delete_article.html', {'article': article})
 
 
 # Read
 def article_detail(request, article_id):
     query = request.GET.get('q')
-    article = get_object_or_404(Journal, pk=article_id)
-    if request.user != article.user and not (request.user.is_superuser or request.user.is_staff):
-        journal = get_object_or_404(Journal, pk=article_id)
+    # print(Journal.objects.all())
+    print(1)
+    article = get_object_or_404(Article, pk=article_id)
+    # if request.user != article.user and not (request.user.is_superuser or request.user.is_staff):
+    #     article = get_object_or_404(Article, pk=article_id)
     return render(request, 'user/pages/article_detail.html', {'article': article})
 
 def journal_detail(request, journal_id):

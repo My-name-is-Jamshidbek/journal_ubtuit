@@ -1,15 +1,15 @@
 {% extends 'user/master.html' %}
 {% load static %}
 {% block title %}
-    Jurnallar
+    Home
 {% endblock title %}
 
 {% block content %}
 <div class="container">
     <div class="row">
-        <!-- journals Section -->
+        <!-- Journals Section -->
         <div class="col-md-8">
-            <h1 class="text-center mt-5 mb-4">Jurnallar jadvali</h1>
+            <h1 class="text-center mt-5 mb-4">Journals Table</h1>
             <ul class="list-group">
                 {% for journal in journals %}
                     <li class="list-group-item mb-2 border-2">
@@ -17,11 +17,11 @@
                             <div>
                                 <h5 class="mb-0">{{ journal.title }}</h5>
                                 <p>{{ journal.description|truncatechars:150 }}</p>
-                                <p class="text-muted">Yozuvchi: {{ journal.user.lastname }}</p>
-                                <small class="text-muted">Yuklangan sana: {{ journal.created_at }}</small>
+                                <p class="text-muted">Author: {{ journal.user.lastname }}</p>
+                                <small class="text-muted">Uploaded on: {{ journal.created_at }}</small>
                             </div>
                             <div>
-                                <a href="{% url 'journal_detail' journal_id=journal.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
+                                <a href="{% url 'journal_detail' journal_id=journal.id %}" class="btn btn-sm btn-primary me-2">View</a>
                             </div>
                         </div>
                     </li>
@@ -30,33 +30,33 @@
             {% if journals.paginator.page > 1 %}
                 <!-- Pagination -->
                 <nav aria-label="Page navigation example" class="m-5">
-                  <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                      <a class="page-link {% if not journals.has_previous %}disabled{% endif %}" href="?page={% if not journals.has_previous %}1{% else %}{{ journals.previous_page_number }}{% endif %}"> &laquo; Boshi</a>
-                    </li>
-                    <li class="page-item {% if not journals.has_previous %}disabled{% endif %}">
-                      <a class="page-link" href="?page={% if journals.has_previous %}{{ journals.previous_page_number }}{% else %}1{% endif %}">&lsaquo; Oldingi</a>
-                    </li>
-                    {% for page in journals.paginator.page_range %}
-                      {% if page == journals.number %}
-                        <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-                      {% elif page > journals.number|add:'-2' and page < journals.number|add:'2' %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-                      {% endif %}
-                    {% endfor %}
-                    <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
-                      <a class="page-link" href="?page={% if journals.has_next %}{{ journals.next_page_number }}{% else %}{{ journals.paginator.num_pages }}{% endif %}">Keyingi &rsaquo;</a>
-                    </li>
-                    <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
-                      <a class="page-link" href="?page={{ journals.paginator.num_pages }}">Oxiri &raquo;</a>
-                    </li>
-                  </ul>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link {% if not journals.has_previous %}disabled{% endif %}" href="?page={% if not journals.has_previous %}1{% else %}{{ journals.previous_page_number }}{% endif %}">&laquo; Start</a>
+                        </li>
+                        <li class="page-item {% if not journals.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if journals.has_previous %}{{ journals.previous_page_number }}{% else %}1{% endif %}">&lsaquo; Previous</a>
+                        </li>
+                        {% for page in journals.paginator.page_range %}
+                            {% if page == journals.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% elif page > journals.number|add:'-2' and page < journals.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if journals.has_next %}{{ journals.next_page_number }}{% else %}{{ journals.paginator.num_pages }}{% endif %}">Next &rsaquo;</a>
+                        </li>
+                        <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={{ journals.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    </ul>
                 </nav>
             {% endif %}
         </div>
         <!-- Calendar Section -->
         <div class="col-md-4">
-            <h1 class="text-center mt-5 mb-4">Kalendar</h1>
+            <h1 class="text-center mt-5 mb-4">Calendar</h1>
             <div class="calendar mt-4" id="calendar_first">
                 <div class="calendar-header d-flex justify-content-between align-items-center">
                     <button class="btn btn-outline-primary btn-sm" id="prevMonth"><i class="bi bi-chevron-left"></i></button>
@@ -191,7 +191,7 @@
 
                 // Optional: Add event listeners for date clicks
                 dateCell.addEventListener('click', () => {
-                    alert(`Siz ${monthAndYear.textContent} oyining ${day}-kunini tanladingiz.`);
+                    alert(`You have selected the ${day} of ${monthAndYear.textContent}.`);
                 });
 
                 calendarBody.appendChild(dateCell);

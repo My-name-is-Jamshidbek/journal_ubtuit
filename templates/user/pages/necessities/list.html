@@ -1,55 +1,55 @@
 {% extends 'user/master.html' %}
 {% block title %}
-    Maqolalar
+    Requirements
 {% endblock title %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="text-center mt-5 mb-4">Talablar jadvali</h1>
+                <h1 class="text-center mt-5 mb-4">Requirements Table</h1>
             </div>
             {% if user.is_authenticated and user.is_staff %}
                 <div class="col-md-4 d-flex align-items-center justify-content-center mt-2">
                     <div class="btns ar center in div">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                          <a type="button" href="{% url 'create_necessity' %}" class="btn btn-success">Qo`shish</a>
+                            <a type="button" href="{% url 'create_necessity' %}" class="btn btn-success">Add</a>
                         </div>
                     </div>
                 </div>
             {% endif %}
         </div>
         <div class="m-5">
-              <div class="accordion accordion-flush" id="accordionFlushExample">
-                  {% for necessity in necessities %}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                {% for necessity in necessities %}
                     <div class="accordion-item">
                         <div class="row">
                             <div class="col-md-{% if user.is_authenticated and user.is_staff %}8{% else %}12{% endif %}">
                                 <h2 class="accordion-header">
-                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapseOne">
-                                      {{ necessity.title }}
-                                  </button>
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
+                                        {{ necessity.title }}
+                                    </button>
                                 </h2>
                             </div>
                             {% if user.is_authenticated and user.is_staff %}
                                 <div class="col-md-4 d-flex align-items-center justify-content-center">
                                     <div class="btns ar center in div">
                                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                          <a type="button" href="{% url 'delete_necessity' necessity.pk %}" class="btn btn-danger mt-2 mb-2">O`chirish</a>
-                                          <a type="button" href="{% url 'update_necessity' necessity.pk %}" class="btn btn-warning mt-2 mb-2">O`zgartirish</a>
+                                            <a type="button" href="{% url 'delete_necessity' necessity.pk %}" class="btn btn-danger mt-2 mb-2">Delete</a>
+                                            <a type="button" href="{% url 'update_necessity' necessity.pk %}" class="btn btn-warning mt-2 mb-2">Edit</a>
                                         </div>
                                     </div>
                                 </div>
                             {% endif %}
                         </div>
-                    <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                          {{ necessity.description|safe }}
+                        <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                {{ necessity.description|safe }}
+                            </div>
                         </div>
                     </div>
-                  </div>
-                  {% endfor %}
-              </div>
+                {% endfor %}
             </div>
+        </div>
     </div>
 {% endblock content %}

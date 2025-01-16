@@ -50,11 +50,11 @@
                             <button class="btn btn-primary btn-sm me-2"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editArticleModal"
-                                    onclick="populateEditArticleModal('{{ article.title }}', '{{ article.description }}', '{% url 'article_update' article.pk %}')">Edit</button>
+                                    onclick="populateEditArticleModal('{{ article.title|escapejs }}', '{{ article.description|escapejs }}', '{% url 'article_update' article.pk %}')">Edit</button>
                             <button class="btn btn-danger btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteArticleModal"
-                                    onclick="populateDeleteArticleModal('{{ article.title }}', '{% url 'article_delete' article.pk %}')">Delete</button>
+                                    onclick="populateDeleteArticleModal('{{ article.title|escapejs }}', '{% url 'article_delete' article.pk %}')">Delete</button>
                         </div>
                     </div>
                 </li>
@@ -97,12 +97,67 @@
     </div>
 </div>
 
+<!-- Delete Journal Modal -->
+<div class="modal fade" id="deleteJournalModal" tabindex="-1" aria-labelledby="deleteJournalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the journal "<span id="deleteJournalTitle"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteJournalForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Journal Modal -->
+<div class="modal fade" id="editJournalModal" tabindex="-1" aria-labelledby="editJournalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Journal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editJournalForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editJournalTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="editJournalTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editJournalDescription" class="form-label">Description</label>
+                        <textarea name="description" class="form-control" id="editJournalDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editJournalFile" class="form-label">Upload File</label>
+                        <input type="file" name="file_url" class="form-control" id="editJournalFile">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Reusable Delete Article Modal -->
 <div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteArticleModalLabel">Confirm Delete</h5>
+                <h5 class="modal-title">Confirm Delete</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -124,7 +179,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editArticleModalLabel">Edit Article</h5>
+                <h5 class="modal-title">Edit Article</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editArticleForm" method="post" enctype="multipart/form-data">
@@ -153,6 +208,17 @@
 </div>
 
 <script>
+    function populateEditJournalModal(title, description, url) {
+        document.getElementById('editJournalTitle').value = title;
+        document.getElementById('editJournalDescription').value = description;
+        document.getElementById('editJournalForm').action = url;
+    }
+
+    function populateDeleteJournalModal(title, url) {
+        document.getElementById('deleteJournalTitle').textContent = title;
+        document.getElementById('deleteJournalForm').action = url;
+    }
+
     function populateEditArticleModal(title, description, url) {
         document.getElementById('editArticleTitle').value = title;
         document.getElementById('editArticleDescription').value = description;

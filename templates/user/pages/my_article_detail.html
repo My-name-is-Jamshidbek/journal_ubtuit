@@ -14,12 +14,12 @@
             {% if article.file_url %}
                 <p><strong>File:</strong> <a href="{{ article.file_url.url }}">{{ article.file_url.name }}</a></p>
             {% endif %}
-        {% if article.user_id == user.id %}
+            {#
             <div class="mt-4">
                 <a href="{% url 'user_article_update' article_id=article.id %}" class="btn btn-primary me-2">Edit</a>
                 <a href="{% url 'user_article_delete' article_id=article.id %}" class="btn btn-danger">Delete</a>
             </div>
-        {% endif %}
+            #}
         </div>
     </div>
 </div>

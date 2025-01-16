@@ -1,49 +1,49 @@
 {% extends 'user/master.html' %}
 {% block title %}
-    Maqolalar
+    Articles
 {% endblock title %}
 
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="text-center mt-5 mb-4">Maqolalar jadvali</h1>
+            <h1 class="text-center mt-5 mb-4">Articles Table</h1>
             <ul class="list-group">
                 {% for article in articles %}
-                     <li class="list-group-item mb-2 border-2">
+                    <li class="list-group-item mb-2 border-2">
                         <div class="align-items-center">
                             <h5 class="mb-0">{{ article.title }}</h5>
                             <p>{{ article.description|truncatechars:150 }}</p>
-                            <p class="text-muted">Yozuvchi: {{ article.user.lastname }}</p>
-                            <small class="text-muted">Yuklangan sana: {{ article.created_at }}</small>
-                            <p class="text-muted">Izoh: {{ article.reason }}</p>
+                            <p class="text-muted">Author: {{ article.user.lastname }}</p>
+                            <small class="text-muted">Uploaded on: {{ article.created_at }}</small>
+                            <p class="text-muted">Comment: {{ article.reason }}</p>
                             <div class="row">
                                 <div class="col">
                                     {% if article.status == 1 %}
                                         <div class="alert alert-success" role="alert">
-                                            Qabul qilingan
+                                            Accepted
                                         </div>
                                     {% elif article.status == 3 %}
                                         <div class="alert alert-danger" role="alert">
-                                              Rad qilingan
+                                            Rejected
                                         </div>
                                     {% elif article.status == 2 %}
                                         <div class="alert alert-warning" role="alert">
-                                              To'lov kutilmoqda
+                                            Payment Pending
                                         </div>
                                     {% elif article.status == 0 %}
                                         <div class="alert alert-info" role="alert">
-                                              Yuklangan
+                                            Uploaded
                                         </div>
                                     {% endif %}
                                 </div>
                                 <div class="col">
                                     <div class="justify-content-end d-flex">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
-                                          <a type="button" target="_blank" href="{% url 'article_detail' article_id=article.id %}" class="btn btn-primary">Ko`rish</a>
+                                            <a type="button" target="_blank" href="{% url 'user_article_detail' article_id=article.pk %}" class="btn btn-primary">View</a>
                                             {% if article.status == 0 or article.status == 3 %}
-                                              <a type="button" href="{% url 'article_update' article_id=article.id %}" class="btn btn-warning">O`zgartirish</a>
-                                              <a type="button" href="{% url 'article_delete' article_id=article.id %}" class="btn btn-danger">O`chirish</a>
+                                                <a type="button" href="{% url 'user_article_update' article_id=article.id %}" class="btn btn-warning">Edit</a>
+                                                <a type="button" href="{% url 'user_article_delete' article_id=article.id %}" class="btn btn-danger">Delete</a>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -53,6 +53,32 @@
                     </li>
                {% endfor %}
             </ul>
+            {% if articles.paginator.num_pages > 1 %}
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example" class="m-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link {% if not articles.has_previous %}disabled{% endif %}" href="?page={% if not articles.has_previous %}1{% else %}{{ articles.previous_page_number }}{% endif %}">&laquo; Start</a>
+                        </li>
+                        <li class="page-item {% if not articles.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if articles.has_previous %}{{ articles.previous_page_number }}{% else %}1{% endif %}">&lsaquo; Previous</a>
+                        </li>
+                        {% for page in articles.paginator.page_range %}
+                            {% if page == articles.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% elif page > articles.number|add:'-2' and page < articles.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if articles.has_next %}{{ articles.next_page_number }}{% else %}{{ articles.paginator.num_pages }}{% endif %}">Next &rsaquo;</a>
+                        </li>
+                        <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={{ articles.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -1,0 +1,70 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Submit Article
+{% endblock title %}
+
+{% block content %}
+    <div class="text-center m-5">
+        <h1>Submit Article</h1>
+        <p>Fill in the article details</p>
+    </div>
+    <div class="row m-5">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Enter the title information" required>
+                <!-- Display errors for 'title' field -->
+                {% for error in form.title.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Enter the description here" required></textarea>
+                <!-- Display errors for 'description' field -->
+                {% for error in form.description.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Upload Article File</label>
+                <input class="form-control" type="file" name="file_url" id="formFileMultiple" required>
+                <!-- Display errors for 'file_url' field -->
+                {% for error in form.file_url.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-check m-2">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    I have reviewed the <a href="{% url 'list_necessities' %}">Requirements</a>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary m-2" id="submitButton" disabled>Upload</button>
+            <a type="button" href="{% url 'list_necessities' %}" class="btn btn-success">Requirements</a>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('flexCheckDefault');
+        const submitButton = document.getElementById('submitButton');
+
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        });
+
+        // Check initial state
+        if (!checkbox.checked) {
+            submitButton.disabled = true;
+        }
+    });
+</script>
+{% endblock %}
