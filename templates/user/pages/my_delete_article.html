@@ -1,0 +1,22 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Delete Article
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center mt-5 mb-4">Delete Article</h1>
+            <div class="alert alert-danger">
+                <p>Are you sure you want to delete the article "{{ article.title }}"?</p>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'user_article_detail' article_id=article.id %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

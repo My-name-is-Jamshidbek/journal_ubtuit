@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class Article(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     reason = models.TextField(default="Kiritilmagan")

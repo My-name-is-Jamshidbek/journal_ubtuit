@@ -1,0 +1,233 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Journal Detail
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="card m-4">
+        <div class="card-header text-center">
+            <h2>{{ journal.title }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Description:</strong></p>
+            <p>{{ journal.description }}</p>
+            <p><strong>Uploaded By:</strong> {{ journal.user.username }}</p>
+            <p><strong>Created At:</strong> {{ journal.created_at }}</p>
+            <p><strong>Last Updated:</strong> {{ journal.updated_at }}</p>
+            {% if journal.file_url %}
+                <p><strong>File:</strong> <a href="{{ journal.file_url.url }}" download>Download File</a></p>
+            {% endif %}
+        </div>
+        <div class="card-footer text-center">
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editJournalModal">Edit</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteJournalModal">Delete</button>
+            <a href="{% url 'journals' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+    <div class="m-2">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="text-center mt-5 mb-4">Articles List</h1>
+            </div>
+            <div class="col-md-4 d-flex align-items-center justify-content-center mt-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addArticleModal">Add Article</button>
+            </div>
+        </div>
+    </div>
+    <div class="m-2 mt-4">
+        <ul class="list-group">
+            {% for article in articles %}
+                <li class="list-group-item mb-2 border-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">{{ article.title }}</h5>
+                            <p>{{ article.description|truncatechars:150 }}</p>
+                            <p class="text-muted">Author: {{ article.user.lastname }}</p>
+                            <small class="text-muted">Uploaded on: {{ article.created_at }}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-sm me-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editArticleModal"
+                                    onclick="populateEditArticleModal('{{ article.title|escapejs }}', '{{ article.description|escapejs }}', '{% url 'article_update' article.pk %}')">Edit</button>
+                            <button class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteArticleModal"
+                                    onclick="populateDeleteArticleModal('{{ article.title|escapejs }}', '{% url 'article_delete' article.pk %}')">Delete</button>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Modals -->
+<!-- Add Article Modal -->
+<div class="modal fade" id="addArticleModal" tabindex="-1" aria-labelledby="addArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addArticleModalLabel">Add Article</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'article_create' journal.pk %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="articleTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="articleTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleDescription" class="form-label">Description</label>
+                        <textarea name="description" class="form-control" id="articleDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleFile" class="form-label">Upload File</label>
+                        <input type="file" name="file_url" class="form-control" id="articleFile" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Journal Modal -->
+<div class="modal fade" id="deleteJournalModal" tabindex="-1" aria-labelledby="deleteJournalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the journal "<span id="deleteJournalTitle"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteJournalForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Journal Modal -->
+<div class="modal fade" id="editJournalModal" tabindex="-1" aria-labelledby="editJournalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Journal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editJournalForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editJournalTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="editJournalTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editJournalDescription" class="form-label">Description</label>
+                        <textarea name="description" class="form-control" id="editJournalDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editJournalFile" class="form-label">Upload File</label>
+                        <input type="file" name="file_url" class="form-control" id="editJournalFile">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Reusable Delete Article Modal -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the article "<span id="deleteArticleTitle"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteArticleForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reusable Edit Article Modal -->
+<div class="modal fade" id="editArticleModal" tabindex="-1" aria-labelledby="editArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Article</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editArticleForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editArticleTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="editArticleTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editArticleDescription" class="form-label">Description</label>
+                        <textarea name="description" class="form-control" id="editArticleDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editArticleFile" class="form-label">Upload File</label>
+                        <input type="file" name="file_url" class="form-control" id="editArticleFile">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function populateEditJournalModal(title, description, url) {
+        document.getElementById('editJournalTitle').value = title;
+        document.getElementById('editJournalDescription').value = description;
+        document.getElementById('editJournalForm').action = url;
+    }
+
+    function populateDeleteJournalModal(title, url) {
+        document.getElementById('deleteJournalTitle').textContent = title;
+        document.getElementById('deleteJournalForm').action = url;
+    }
+
+    function populateEditArticleModal(title, description, url) {
+        document.getElementById('editArticleTitle').value = title;
+        document.getElementById('editArticleDescription').value = description;
+        document.getElementById('editArticleForm').action = url;
+    }
+
+    function populateDeleteArticleModal(title, url) {
+        document.getElementById('deleteArticleTitle').textContent = title;
+        document.getElementById('deleteArticleForm').action = url;
+    }
+</script>
+{% endblock content %}

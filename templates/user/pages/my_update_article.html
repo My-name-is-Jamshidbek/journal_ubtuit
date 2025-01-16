@@ -1,0 +1,33 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Update Article
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center mt-5 mb-4">Update Article</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">Title</label>
+                    <input type="text" name="title" value="{{ article.title }}" class="form-control" id="id_title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    <textarea name="description" class="form-control" id="id_description" rows="5" required>{{ article.description }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="id_file_url" class="form-label">File URL</label>
+                    <input type="file" name="file_url" class="form-control" id="id_file_url">
+                    {# {% if article.file_url %} #}
+                        <p>Old File: <a href="{{ article.file_url.url }}">{{ article.file_url.name }}</a></p>
+                    {# {% endif %} #}
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

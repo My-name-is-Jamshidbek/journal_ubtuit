@@ -1,0 +1,192 @@
+{% extends 'user/master.html' %}
+{% block title %}
+    Articles
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mt-5 mb-4">
+        {% if request.resolver_match.url_name == "loaded_articles" %}
+            Uploaded Articles
+        {% elif request.resolver_match.url_name == "buying_articles" %}
+            Payment Pending Articles
+        {% elif request.resolver_match.url_name == "rejected_articles" %}
+            Rejected Articles
+        {% elif request.resolver_match.url_name == "accepted_articles" %}
+            Accepted Articles
+        {% else %}
+            Articles Table
+        {% endif %}
+    </h1>
+    <ul class="list-group">
+        {% for article in articles %}
+            <li class="list-group-item mb-2 border-2">
+                <div class="align-items-center">
+                    <h5 class="mb-0">{{ article.title }}</h5>
+                    <p>{{ article.description|truncatechars:150 }}</p>
+                    <p class="text-muted">Author: {{ article.user.lastname }}</p>
+                    <small class="text-muted">Uploaded on: {{ article.created_at }}</small>
+                    <p class="text-muted">Comment: {{ article.reason }}</p>
+                    <div class="row">
+                        <div class="col">
+                            {% if article.status == 1 %}
+                                <div class="alert alert-success" role="alert">
+                                    Accepted
+                                </div>
+                            {% elif article.status == 3 %}
+                                <div class="alert alert-danger" role="alert">
+                                    Rejected
+                                </div>
+                            {% elif article.status == 2 %}
+                                <div class="alert alert-warning" role="alert">
+                                    Payment Pending
+                                </div>
+                            {% elif article.status == 0 %}
+                                <div class="alert alert-info" role="alert">
+                                    Uploaded
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <div class="justify-content-end d-flex">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+                                    <a type="button" target="_blank" href="{% url 'user_article_detail' article_id=article.id %}" class="btn btn-primary">View</a>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalreject{{ article.id }}">
+                                        Reject
+                                    </button>
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalbuy{{ article.id }}">
+                                        Transfer to Payment
+                                    </button>
+                                    <button type="button" class="btn btn-success rounded-end" data-bs-toggle="modal" data-bs-target="#modalaccept{{ article.id }}">
+                                        Accept
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalreject{{ article.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Reject Article</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{% url 'reject_article' article_id=article.id %}" method="get">
+                                                    <div class="modal-body">
+                                                        <div class="mb-3 row">
+                                                            <label for="staticStatus" class="col-sm-2 col-form-label">Status</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" readonly class="form-control-plaintext text-danger" id="staticEmail" value="Rejected">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 row">
+                                                            <label for="inputreason" class="col-sm-2 col-form-label">Comment</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea class="form-control" id="inputreason" name="reason" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="modalaccept{{ article.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Accept Article</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{% url 'accept_article' article_id=article.id %}" method="get">
+                                                    <div class="modal-body">
+                                                        <div class="mb-3 row">
+                                                            <label for="staticStatus" class="col-sm-2 col-form-label">Status</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" readonly class="form-control-plaintext text-success" id="staticEmail" value="Accepted">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 row">
+                                                            <label for="inputreason" class="col-sm-2 col-form-label">Comment</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea class="form-control" id="inputreason" name="reason" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-success">Accept</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="modalbuy{{ article.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Transfer Article to Payment</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{% url 'buying_article' article_id=article.id %}" method="get">
+                                                    <div class="modal-body">
+                                                        <div class="mb-3 row">
+                                                            <label for="staticStatus" class="col-sm-2 col-form-label">Status</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" readonly class="form-control-plaintext text-warning" id="staticEmail" value="Transfer to Payment">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 row">
+                                                            <label for="inputreason" class="col-sm-2 col-form-label">Comment</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea class="form-control" id="inputreason" name="reason" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-warning">Transfer to Payment</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% empty %}
+                    <h2 class="text-center">No articles available!</h2>
+                {% endfor %}
+            </ul>
+            {% if articles.paginator.num_pages > 1 %}
+                <nav aria-label="Page navigation example" class="m-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link {% if not articles.has_previous %}disabled{% endif %}" href="?page={% if not articles.has_previous %}1{% endif %}">&laquo; Start</a>
+                        </li>
+                        <li class="page-item {% if not articles.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if articles.has_previous %}{{ articles.previous_page_number }}{% endif %}">&lsaquo; Previous</a>
+                        </li>
+                        {% for page in articles.paginator.page_range %}
+                            {% if page == articles.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% elif page > articles.number|add:'-2' and page < articles.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if articles.has_next %}{{ articles.next_page_number }}{% endif %}">Next &rsaquo;</a>
+                        </li>
+                        <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={{ articles.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+{% endblock content %}

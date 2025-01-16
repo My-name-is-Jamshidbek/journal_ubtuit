@@ -1,118 +1,226 @@
 {% extends 'user/master.html' %}
+{% load static %}
 {% block title %}
-    Asosiy sahifa
+    Home
 {% endblock title %}
 
 {% block content %}
 <div class="container">
-        <h1 class="text-center mt-5 mb-4">Jurnallar jadvali</h1>
-    <div class="d-flex">
-        {% for year, months in issues_head.items %}
-            <div class="card text-center m-2">
-                <div class="card-header">
-                    Taqdim etilgan
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ year }}-yil</h5>
-                    <p class="card-text">Mart-Iyun-Sentyabr-Dekabr</p>
-                    <div class="d-flex align-items-center" style="column-gap: 5px; row-gap: 5px; flex-wrap: wrap">
-                        {% for month in months %}
-                            <a href="{% url 'list_article' %}?search_year={{ year }}&search_issue={{ month }}" class="btn btn-primary text-nowrap">{{ month }}-chorak</a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-        <div class="card text-center">
-            <div class="card-header">
-                Taqdim etish uchun ochiq
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ now_year}} - yil</h5>
-                <p class="card-text">{{ now_issue }} - chorak uchun maqolalar qabul qilish davom etmoqda.</p>
-                <a href="{% url 'create_article' %}" class="btn btn-primary" style="background-color: #0f237e !important;">Taqdim etish</a>
-            </div>
-            <div class="card-footer text-body-secondary">
-                Davom etmoqda
-            </div>
-        </div>
-    </div>
     <div class="row">
+        <!-- Journals Section -->
         <div class="col-md-8">
-            <h1 class="text-center mt-5 mb-4">Maqolalar jadvali</h1>
+            <h1 class="text-center mt-5 mb-4">Journals Table</h1>
             <ul class="list-group">
-                {% for article in articles %}
+                {% for journal in journals %}
                     <li class="list-group-item mb-2 border-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="mb-0">{{ article.title }}</h5>
-                                <p>{{ article.description|truncatechars:150 }}</p>
-                                <p class="text-muted">Yozuvchi: {{ article.user.lastname }}</p>
-                                <small class="text-muted">Yuklangan sana: {{ article.created_at }}</small>
-                          </div>
-                        <div>
-                            <a href="{% url 'article_detail' article_id=article.id %}" class="btn btn-sm btn-primary me-2">Ko'rish</a>
-                        </div>
+                                <h5 class="mb-0">{{ journal.title }}</h5>
+                                <p>{{ journal.description|truncatechars:150 }}</p>
+                                <p class="text-muted">Author: {{ journal.user.lastname }}</p>
+                                <small class="text-muted">Uploaded on: {{ journal.created_at }}</small>
+                            </div>
+                            <div>
+                                <a href="{% url 'journal_detail' journal_id=journal.id %}" class="btn btn-sm btn-primary me-2">View</a>
+                            </div>
                         </div>
                     </li>
                 {% endfor %}
             </ul>
-            <nav aria-label="Page navigation example" class="m-5">
-              <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link {% if not articles.has_previous %}disabled{% endif %}" href="?page={% if not articles.has_previous %}1{% endif %}"> &laquo; Boshi</a>
-                </li>
-                <li class="page-item {% if not articles.has_previous %}disabled{% endif %}">
-                  <a class="page-link" href="?page={% if articles.has_previous %}{{ articles.previous_page_number }}{% endif %}">&lsaquo; Oldingi</a>
-                </li>
-                {% for page in articles.paginator.page_range %}
-                  {% if page == articles.number %}
-                    <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-                  {% elif page > articles.number|add:'-2' and page < articles.number|add:'2' %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-                  {% endif %}
-                {% endfor %}
-                <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
-                  <a class="page-link" href="?page={% if articles.has_next %}{{ articles.next_page_number }}{% endif %}">Keyingi &rsaquo;</a>
-                </li>
-                <li class="page-item {% if not articles.has_next %}disabled{% endif %}">
-                  <a class="page-link" href="?page={{ articles.paginator.num_pages }}">Oxiri &raquo;</a>
-                </li>
-              </ul>
-            </nav>
+            {% if journals.paginator.page > 1 %}
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example" class="m-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link {% if not journals.has_previous %}disabled{% endif %}" href="?page={% if not journals.has_previous %}1{% else %}{{ journals.previous_page_number }}{% endif %}">&laquo; Start</a>
+                        </li>
+                        <li class="page-item {% if not journals.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if journals.has_previous %}{{ journals.previous_page_number }}{% else %}1{% endif %}">&lsaquo; Previous</a>
+                        </li>
+                        {% for page in journals.paginator.page_range %}
+                            {% if page == journals.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% elif page > journals.number|add:'-2' and page < journals.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={% if journals.has_next %}{{ journals.next_page_number }}{% else %}{{ journals.paginator.num_pages }}{% endif %}">Next &rsaquo;</a>
+                        </li>
+                        <li class="page-item {% if not journals.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="?page={{ journals.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
         </div>
+        <!-- Calendar Section -->
         <div class="col-md-4">
-            <h1 class="text-center mt-5 mb-4">Jurnallar jadvali</h1>
-            <div class="card text-center"   style="margin-bottom: 30px">
-              <div class="card-header">
-                Taqdim etish uchun ochiq
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ now_year}} - yil</h5>
-                <p class="card-text">{{ now_issue }} - chorak uchun maqolalar qabul qilish davom etmoqda.</p>
-                <a href="{% url 'create_article' %}" class="btn btn-primary" style="background: #0f237e !important;">Taqdim etish</a>
-              </div>
-              <div class="card-footer text-body-secondary">
-                Davom etmoqda
-              </div>
-            </div>
-            {% for year, months in issues.items %}
-            <div class="card text-center" style="margin-bottom: 30px">
-              <div class="card-header">
-                Taqdim etilgan
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ year }}-yil</h5>
-                <p class="card-text">Mart-Iyun-Sentyabr-Dekabr</p>
-                <div class="d-flex align-items-center" style="column-gap: 5px; row-gap: 5px; flex-wrap: wrap">
-                  {% for month in months %}
-                      <a href="{% url 'list_article' %}?search_year={{ year }}&search_issue={{ month }}" class="btn btn-primary text-nowrap">{{ month }}-chorak</a>
-                  {% endfor %}
+            <h1 class="text-center mt-5 mb-4">Calendar</h1>
+            <div class="calendar mt-4" id="calendar_first">
+                <div class="calendar-header d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-primary btn-sm" id="prevMonth"><i class="bi bi-chevron-left"></i></button>
+                    <h4 id="monthAndYear" class="mb-0"></h4>
+                    <button class="btn btn-outline-primary btn-sm" id="nextMonth"><i class="bi bi-chevron-right"></i></button>
                 </div>
-              </div>
+                <div class="calendar-body mt-3">
+                    <!-- Days of the week -->
+                    <div class="calendar-day">Sun</div>
+                    <div class="calendar-day">Mon</div>
+                    <div class="calendar-day">Tue</div>
+                    <div class="calendar-day">Wed</div>
+                    <div class="calendar-day">Thu</div>
+                    <div class="calendar-day">Fri</div>
+                    <div class="calendar-day">Sat</div>
+                    <!-- Dates will be injected here by JavaScript -->
+                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>
 {% endblock content %}
+
+{% block style %}
+<!-- Bootstrap Icons CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    /* Custom Styles for Calendar */
+    .calendar {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .calendar-body {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .calendar-day, .calendar-date {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .calendar-day {
+      font-weight: bold;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+    .calendar-date {
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .calendar-date:hover {
+      background-color: #e9ecef;
+    }
+    .today {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .text-muted {
+      font-size: 0.85em;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<!-- Bootstrap JS Bundle (Includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // JavaScript to handle calendar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarBody = document.querySelector('#calendar_first .calendar-body');
+        const monthAndYear = document.getElementById('monthAndYear');
+        const prevButton = document.getElementById('prevMonth');
+        const nextButton = document.getElementById('nextMonth');
+
+        let currentDate = new Date();
+
+        function renderCalendar(date) {
+            // Clear existing dates except the day headers
+            calendarBody.innerHTML = `
+                <div class="calendar-day">Sun</div>
+                <div class="calendar-day">Mon</div>
+                <div class="calendar-day">Tue</div>
+                <div class="calendar-day">Wed</div>
+                <div class="calendar-day">Thu</div>
+                <div class="calendar-day">Fri</div>
+                <div class="calendar-day">Sat</div>
+            `;
+
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            monthAndYear.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+
+            // First day of the month
+            const firstDay = new Date(year, month, 1).getDay();
+
+            // Number of days in the month
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Today's date
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
+
+            // Fill in the blanks for days before the first day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('calendar-date', 'text-muted');
+                emptyCell.innerHTML = '&nbsp;'; // Non-breaking space for empty cells
+                calendarBody.appendChild(emptyCell);
+            }
+
+            // Fill in the days of the current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateCell = document.createElement('div');
+                dateCell.classList.add('calendar-date');
+
+                dateCell.textContent = day;
+
+                // Highlight today's date
+                if (isCurrentMonth && day === today.getDate()) {
+                    dateCell.classList.add('today');
+                }
+
+                // Optional: Add event listeners for date clicks
+                dateCell.addEventListener('click', () => {
+                    alert(`You have selected the ${day} of ${monthAndYear.textContent}.`);
+                });
+
+                calendarBody.appendChild(dateCell);
+            }
+
+            // Optionally, fill in the remaining cells for the last week
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 1; i <= remainingCells; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('calendar-date', 'text-muted');
+                emptyCell.innerHTML = '&nbsp;'; // Non-breaking space for empty cells
+                calendarBody.appendChild(emptyCell);
+            }
+        }
+
+        // Initial render
+        renderCalendar(currentDate);
+
+        // Event listeners for navigation buttons
+        prevButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+    });
+</script>
+{% endblock %}

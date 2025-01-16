@@ -8,16 +8,18 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <h1 class="text-center mt-5 mb-4">{{ article.title }}</h1>
-            <p><strong>Tavsif:</strong> {{ article.description }}</p>
-            <p><strong>Joylandi:</strong> {{ article.created_at }}</p>
-            <p><strong>Yozuvchi:</strong> {{ article.created_at }}</p>
+            <p><strong>Description:</strong> {{ article.description }}</p>
+            <p><strong>Uploaded on:</strong> {{ article.created_at }}</p>
+            <p><strong>Author:</strong> {{ article.user.lastname }}</p>
             {% if article.file_url %}
-            <p><strong>Fayl:</strong> <a href="{{ article.file_url.url }}">{{ article.file_url.name }}</a></p>
+                <p><strong>File:</strong> <a href="{{ article.file_url.url }}">{{ article.file_url.name }}</a></p>
             {% endif %}
-{#            <div class="mt-4">#}
-{#                <a href="{% url 'article_update' article_id=article.id %}" class="btn btn-primary me-2">Edit</a>#}
-{#                <a href="{% url 'article_delete' article_id=article.id %}" class="btn btn-danger">Delete</a>#}
-{#            </div>#}
+        {% if article.user_id == user.id %}
+            <div class="mt-4">
+                <a href="{% url 'user_article_update' article_id=article.id %}" class="btn btn-primary me-2">Edit</a>
+                <a href="{% url 'user_article_delete' article_id=article.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        {% endif %}
         </div>
     </div>
 </div>
