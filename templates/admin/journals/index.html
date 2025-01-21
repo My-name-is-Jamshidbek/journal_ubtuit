@@ -1,18 +1,18 @@
 {% extends 'user/master.html' %}
 {% block title %}
-    Journals
+    Issues
 {% endblock title %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="text-center mt-5 mb-4">Journals Table</h1>
+                <h1 class="text-center mt-5 mb-4">Issues Table</h1>
             </div>
             <div class="col-md-4 d-flex align-items-center justify-content-center mt-2">
                 <div class="btns ar center in div">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                      <a type="button" href="{% url 'journal_create' %}" class="btn btn-success">Add Journal</a>
+                      <a type="button" href="{% url 'journal_create' %}" class="btn btn-success">Add Issue</a>
                     </div>
                 </div>
             </div>

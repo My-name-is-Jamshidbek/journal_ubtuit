@@ -1,6 +1,6 @@
 {% extends 'user/master.html' %}
 {% block title %}
-    Journal Detail
+    Issue Detail
 {% endblock title %}
 
 {% block content %}
@@ -106,7 +106,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete the journal "<span id="deleteJournalTitle"></span>"?
+                Are you sure you want to delete the Issue "<span id="deleteJournalTitle"></span>"?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -124,7 +124,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Journal</h5>
+                <h5 class="modal-title">Edit Issue</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editJournalForm" method="post" enctype="multipart/form-data">

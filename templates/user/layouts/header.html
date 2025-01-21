@@ -13,7 +13,10 @@
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'list_journal' %}">Journals</a>
+          <a class="nav-link" href="{% url 'list_journal' %}">Issues</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'news_list' %}">News</a>
         </li>
         {% if not user.is_staff and not user.is_admin %}
             <li class="nav-item">
@@ -29,7 +32,7 @@
       </ul>
         {% if user.is_authenticated and user.is_staff %}
           <a type="button" class="btn btn-primary m-2" href="{% url 'journals' %}">
-              Journals
+              Issues
           </a>
 
         <div class="btn-group m-2">

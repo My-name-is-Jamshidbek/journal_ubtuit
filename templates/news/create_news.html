@@ -1,0 +1,33 @@
+<!-- news/templates/news/create_news.html -->
+
+{% extends 'user/master.html' %}
+
+{% block title %}Create News{% endblock %}
+
+{% block content %}
+    <h1>Create a New News Item</h1>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
+        </div>
+        <div class="mb-3">
+            <label for="subtitle" class="form-label">Subtitle</label>
+            <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Enter subtitle (optional)">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Enter description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'news_list' %}" class="btn btn-secondary">Back to News List</a>
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('description');
+    </script>
+{% endblock %}
