@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'articles.apps.ArticlesConfig',
     'necessities.apps.NecessitiesConfig',
     'journals.apps.JournalsConfig',
+    'news.apps.NewsConfig',
 
     # installed apps
     'ckeditor',

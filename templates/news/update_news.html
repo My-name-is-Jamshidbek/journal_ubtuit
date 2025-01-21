@@ -1,0 +1,33 @@
+<!-- news/templates/news/update_news.html -->
+
+{% extends 'user/master.html' %}
+
+{% block title %}Update News{% endblock %}
+
+{% block content %}
+    <h1>Update News Item</h1>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ news_item.title }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="subtitle" class="form-label">Subtitle</label>
+            <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{ news_item.subtitle }}" placeholder="Enter subtitle (optional)">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" required>{{ news_item.description }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'news_list' %}" class="btn btn-secondary">Back to News List</a>
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('description');
+    </script>
+{% endblock %}
