@@ -1,0 +1,146 @@
+# ===============================
+# Python
+# ===============================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ===============================
+# Django
+# ===============================
+
+# Django specific files
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media and static files
+media/
+staticfiles/
+static/
+
+# Celery Beat schedule file
+celerybeat-schedule
+celerybeat.pid
+
+# Sphinx documentation
+docs/_build/
+
+# ===============================
+# Environment Variables & Secrets
+# ===============================
+
+# Environment variable files
+.env
+.env.*
+.venv/
+
+# Secrets
+.secret_key
+
+# ===============================
+# Testing & Coverage
+# ===============================
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ===============================
+# IDEs and Editors
+# ===============================
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Other editors
+*~
+*.bak
+*.swp
+
+# ===============================
+# Operating System Files
+# ===============================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# ===============================
+# Miscellaneous
+# ===============================
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Backup files
+*~
+*.bak
+*.swp
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
