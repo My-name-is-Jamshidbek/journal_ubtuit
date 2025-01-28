@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from articles.additional_functions import get_current_quarter, get_last_quarter_dates
 from journals.models import Journal
+from news.models import New
 
 
 def home(request):
@@ -43,4 +44,7 @@ def home(request):
     except EmptyPage:
         # If page is out of range, deliver last page of results.
         journals = paginator.page(paginator.num_pages)
-    return render(request, 'user/pages/home.html', {'journals': journals})
+
+    latest_news = New.objects.all().order_by('-created_at')[:10]
+
+    return render(request, 'user/pages/home.html', {'journals': journals, 'news_obj': latest_news})
