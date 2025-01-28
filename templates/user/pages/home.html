@@ -62,7 +62,7 @@
                                 {% if news.subtitle %}
                                     <h6 class="mb-1 text-muted">{{ news.subtitle }}</h6>
                                 {% endif %}
-                                <p class="text-muted">Author: {{ news.creator.get_full_name|default:news.creator.username }}</p>
+{#                                <p class="text-muted">Author: {{ news.creator.get_full_name|default:news.creator.username }}</p>#}
                                 <small class="text-muted">Uploaded on: {{ news.created_at|date:"M d, Y H:i" }}</small>
                             </div>
                             <div>
