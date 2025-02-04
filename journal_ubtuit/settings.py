@@ -148,9 +148,12 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',
+        'toolbar': 'Full',
         'height': 300,
         'width': 900,
+        'extraPlugins': ','.join([
+            'uploadimage',
+        ]),
     },
 }
 
