@@ -106,11 +106,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete the Issue "<span id="deleteJournalTitle"></span>"?
+                Are you sure you want to delete the Issue "<span id="deleteJournalTitle">{{ journal.title }}</span>"?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteJournalForm" method="post">
+                <form id="deleteJournalForm" method="post" action="{% url 'journal_delete' journal.pk %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
@@ -127,20 +127,25 @@
                 <h5 class="modal-title">Edit Issue</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editJournalForm" method="post" enctype="multipart/form-data">
+            <form id="editJournalForm" method="post" action="{% url 'journal_update' journal.pk %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="editJournalTitle" class="form-label">Title</label>
-                        <input type="text" name="title" class="form-control" id="editJournalTitle" required>
+                        <input type="text" name="title" class="form-control" id="editJournalTitle" value="{{ journal.title }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editJournalDescription" class="form-label">Description</label>
-                        <textarea name="description" class="form-control" id="editJournalDescription" rows="3" required></textarea>
+                      <label for="editJournalDescription" class="form-label">Description</label>
+                      <textarea name="description" class="form-control" id="editJournalDescription" rows="3" required>{{ journal.description }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="editJournalFile" class="form-label">Upload File</label>
                         <input type="file" name="file_url" class="form-control" id="editJournalFile">
+                    </div>
+                    <div class="mb-3">
+                        {% if journal.file_url %}
+                            <p><strong>Old file:</strong> <a href="{{ journal.file_url.url }}" download>Download File</a></p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -208,12 +213,6 @@
 </div>
 
 <script>
-    function populateEditJournalModal(title, description, url) {
-        document.getElementById('editJournalTitle').value = title;
-        document.getElementById('editJournalDescription').value = description;
-        document.getElementById('editJournalForm').action = url;
-    }
-
     function populateDeleteJournalModal(title, url) {
         document.getElementById('deleteJournalTitle').textContent = title;
         document.getElementById('deleteJournalForm').action = url;

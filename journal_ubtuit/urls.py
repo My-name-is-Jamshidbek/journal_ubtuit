@@ -24,10 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pages.urls')),
     path('accounts/', include('accounts.urls')),
-    path('journals/', include('articles.urls')),
+    path('issues/', include('articles.urls')),
     path('necessities/', include('necessities.urls')),
     path('staff/articles/', include('articles.staff_urls')),
-    path('staff/journals/', include('journals.urls')),
+    path('staff/issues/', include('journals.urls')),
     path('news/', include('news.urls')),
 
     path('ckeditor/', include('ckeditor_uploader.urls')),

@@ -29,7 +29,10 @@ def journal_create(request):
 
 # Function-based view to update an existing journal
 def journal_update(request, pk):
-    journal = get_object_or_404(Journal, pk=pk, user=request.user)
+    if request.user.is_staff or request.user.is_superuser:
+        journal = get_object_or_404(Journal, pk=pk)
+    else:
+        journal = get_object_or_404(Journal, pk=pk, user=request.user)
     if request.method == 'POST':
         journal.title = request.POST.get('title')
         journal.description = request.POST.get('description')
